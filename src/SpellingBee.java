@@ -22,7 +22,7 @@ import java.util.Scanner;
  * It utilizes recursion to generate the strings, mergesort to sort them, and
  * binary search to find them in a dictionary.
  *
- * @author Zach Blick, [ADD YOUR NAME HERE]
+ * @author Zach Blick, Ruchi Mangtani
  *
  * Written on March 5, 2023 for CS2 @ Menlo School
  *
@@ -40,11 +40,21 @@ public class SpellingBee {
         words = new ArrayList<String>();
     }
 
-    // TODO: generate all possible substrings and permutations of the letters.
+    // completed: generate all possible substrings and permutations of the letters.
     //  Store them all in the ArrayList words. Do this by calling ANOTHER method
     //  that will find the substrings recursively.
     public void generate() {
-        // YOUR CODE HERE — Call your recursive method!
+        makeWords("", letters);
+    }
+
+    private void makeWords(String word, String letters) {
+        if (letters.equals("")) {
+            return;
+        }
+        for (int i = 0; i < letters.length(); i++) {
+            words.add(word + letters.charAt(i));
+            makeWords(word + letters.charAt(i), letters.substring(0, i) + letters.substring(i+1));
+        }
     }
 
     // TODO: Apply mergesort to sort all words. Do this by calling ANOTHER method
@@ -67,8 +77,22 @@ public class SpellingBee {
 
     // TODO: For each word in words, use binary search to see if it is in the dictionary.
     //  If it is not in the dictionary, remove it from words.
+    // NEED TO DO THIS WITH BINARY SEARCH!!!
     public void checkWords() {
-        // YOUR CODE HERE
+        for (int i = 0; i < words.size(); i++) {
+            if (!found(words.get(i))) {
+                words.remove(i);
+            }
+        }
+    }
+
+    public boolean found(String s) {
+        for (int i = 0; i < DICTIONARY.length; i++) {
+            if (DICTIONARY[i].equals(s)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     // Prints all valid words to wordList.txt
