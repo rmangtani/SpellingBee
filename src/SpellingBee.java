@@ -63,21 +63,35 @@ public class SpellingBee {
         words = mergeSort(words);
     }
 
+    /**
+     * Recursively implements merge sort
+     * @param arr - the arraylist that will be sorted
+     * @return a sorted arraylist
+     */
     public ArrayList<String> mergeSort(ArrayList<String> arr) {
         if (arr.size() == 1)
             return arr;
         else {
             ArrayList<String> arr1 = new ArrayList<String>();
             ArrayList<String> arr2 = new ArrayList<String>();
+            // Splits the array
             for (int i = 0; i < arr.size() / 2; i++)
                 arr1.add(arr.get(i));
             for (int i = arr.size() / 2; i < arr.size(); i++)
                 arr2.add(arr.get(i));
+            // Sorts both halves
             arr1 = mergeSort(arr1);
             arr2 = mergeSort(arr2);
             return merge(arr1, arr2);
         }
     }
+
+    /**
+     *
+     * @param arr1
+     * @param arr2
+     * @return
+     */
     public static ArrayList<String> merge(ArrayList<String> arr1, ArrayList<String> arr2) {
         ArrayList<String> newArr = new ArrayList<String>();
         while (true) {
@@ -125,33 +139,25 @@ public class SpellingBee {
     //  If it is not in the dictionary, remove it from words.
     public void checkWords() {
         for (int i = 0; i < words.size(); i++) {
-            if (!found(words.get(i))) {
+            if (!found(words.get(i), 0, DICTIONARY.length-1, DICTIONARY.length/2)) {
                 words.remove(i);
                 i--;
             }
         }
-        //System.out.println(words);
     }
 
-    public boolean found(String s) {
-        int mid = DICTIONARY.length/2;
-        int start = 0;
-        int end = DICTIONARY.length-1;
-        while (true) {
-            if (start > end) {
-                return false;
-            }
-            if (s.equals(DICTIONARY[mid])) {
-                return true;
-            }
-            else if (s.compareTo(DICTIONARY[mid]) < 0) {
-                end = mid-1;
-                mid = start + ((mid-start)/2);
-            }
-            else {
-                start = mid+1;
-                mid = start + ((end-mid)/2);
-            }
+    public boolean found(String s, int start, int end, int mid) {
+        if (start > end) {
+            return false;
+        }
+        if (s.equals(DICTIONARY[mid])) {
+            return true;
+        }
+        else if (s.compareTo(DICTIONARY[mid]) < 0) {
+            return found(s, start, mid-1, start + ((mid-start)/2));
+        }
+        else {
+            return found(s, mid+1, end, start + ((end-mid)/2));
         }
     }
 
